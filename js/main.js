@@ -1,10 +1,23 @@
 const floors = document.querySelectorAll(".floor");
-const lift = document.querySelector(".lift");
+const lifts = document.querySelectorAll(".lift");
 const buttons = document.querySelectorAll("button");
 let isMoving = false;
+const TOTALLIFTS = [];
 
-const currentLiftFloor = () => {
-  return Number(lift.parentNode.className.match(/\d/g));
+{
+  lifts.forEach((lift) => {
+    TOTALLIFTS.push(lift);
+    lift.addEventListener("transitionend", (e) => {
+      e.target.classList.remove("animate");
+      isMoving = false;
+    });
+  });
+}
+TOTALLIFTS[1].style.backgroundColor = "red";
+console.log(TOTALLIFTS);
+
+const currentLiftFloor = (liftNo) => {
+  return Number(TOTALLIFTS[liftNo].parentNode.className.match(/\d/g));
 };
 
 const getCurrentControllerFloor = (element) => {
@@ -16,24 +29,32 @@ buttons.forEach((btn) =>
   btn.addEventListener("click", (e) => {
     const btnDirection = e.target.className;
     const destination = getCurrentControllerFloor(e.target);
-    console.log(destination);
-    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    (async () => {
-      for (i = 0; true; i++) {
-        if (destination > currentLiftFloor()) {
-          moveUp();
-        }
-        if (destination < currentLiftFloor()) {
-          moveDown();
-        }
-        if (destination == currentLiftFloor()) {
-          return;
-        }
-        await wait(1000);
-      }
-    })();
+    console.log("destination" + destination);
+    moveLift(destination, 1);
   })
 );
+
+function moveLift(destination, liftNo) {
+  console.log("movelift" + destination + "" + liftNo);
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  (async () => {
+    for (i = 0; true; i++) {
+      console.log("currentfloorlift" + currentLiftFloor(liftNo));
+      if (destination > currentLiftFloor(liftNo)) {
+        moveUp(liftNo);
+      }
+      if (destination < currentLiftFloor(liftNo)) {
+        console.log("movedown");
+        moveDown(liftNo);
+      }
+      if (destination == currentLiftFloor(liftNo)) {
+        return;
+      }
+      await wait(1000);
+      console.log("loop");
+    }
+  })();
+}
 
 //flip animation
 class Flip {
@@ -58,29 +79,22 @@ class Flip {
 
 const flip = new Flip();
 
-lift.addEventListener("transitionend", (e) => {
-  e.target.classList.remove("animate");
-  isMoving = false;
-});
-
-function moveDown() {
-  console.log("down");
+function moveDown(liftNo) {
   if (isMoving) return;
   isMoving = true;
-  const goTo = floors[currentLiftFloor() - 1];
-  flip.first(lift);
-  goTo.appendChild(lift); //append
-  flip.invert(lift);
-  flip.play(lift);
+  const goTo = floors[currentLiftFloor(liftNo) - 1];
+  flip.first(TOTALLIFTS[liftNo]);
+  goTo.appendChild(TOTALLIFTS[liftNo]); //append
+  flip.invert(TOTALLIFTS[liftNo]);
+  flip.play(TOTALLIFTS[liftNo]);
 }
 
-function moveUp() {
-  console.log("up");
+function moveUp(liftNo) {
   if (isMoving) return;
   isMoving = true;
-  const goTo = floors[currentLiftFloor() + 1];
-  flip.first(lift);
-  goTo.appendChild(lift); //append
-  flip.invert(lift);
-  flip.play(lift);
+  const goTo = floors[currentLiftFloor(liftNo) + 1];
+  flip.first(TOTALLIFTS[liftNo]);
+  goTo.appendChild(TOTALLIFTS[liftNo]); //append
+  flip.invert(TOTALLIFTS[liftNo]);
+  flip.play(TOTALLIFTS[liftNo]);
 }
