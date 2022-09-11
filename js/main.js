@@ -30,14 +30,20 @@ buttons.forEach((btn) =>
     const btnDirection = e.target.className;
     const destination = getCurrentControllerFloor(e.target);
     console.log("destination" + destination);
-    async function calllifts() {
-      await moveLift(3, 1);
-      await moveLift(2, 0);
+    if (true) {
+      moveLift(destination, 0);
+    } else {
     }
-    calllifts();
+    // moveLift(destination, 1);
+    // async function calllifts() {
+    //   await moveLift(3, 1);
+    //   await moveLift(2, 0);
+    // }
+    // calllifts();
   })
 );
-
+// create a destination array
+// destination [0,1,2,]
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 function moveLift(destination, liftNo) {
   (async () => {
