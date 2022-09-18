@@ -14,7 +14,8 @@ body {
   width: 100%;
   background-color: rgba(255, 89, 0, 0.04);
   height: 10rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: 150px 1fr;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
@@ -35,7 +36,7 @@ body {
 }
 .controller {
 padding: 1rem;
- width: 4rem;
+
 }
 button {
   margin: 2px;
@@ -44,7 +45,7 @@ button {
   border-radius: 4px;
 }
 .floor .lift-path{
-  width: 80%;
+
   height: 100%;
   display: flex;
   justify-content: space-around;

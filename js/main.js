@@ -21,6 +21,7 @@ lifts.forEach((lift, idx) => {
 
 
 const currentLiftFloor = (lift) => {
+
   return  Number(lift.parentNode.parentNode.className.match(/\d/g))
 };
 
@@ -36,8 +37,11 @@ buttons.forEach((btn) =>
     const btnDirection = e.target.className;
     const destination = getCurrentControllerFloor(e.target);
     console.log("destination" + destination);
-    log("nearlift " +getLift(destination))
-    moveLift(destination, getLift(destination))
+    const liftNo = getLift(destination)
+    log("nearlift " +liftNo)
+    if(!liftNo && !TOTALLIFTS[liftNo] ) return
+    if(destination === currentLiftFloor(TOTALLIFTS[liftNo])) return
+    else moveLift(destination, liftNo)
   })
 );
 
@@ -50,6 +54,8 @@ function getShortestDistance( lift ,destination, j  ){
 
 
 function getLift(destination){
+  //checks if the floor has lift already
+if (document.querySelector(`.floor--${destination} .lift`) !== null) return
    let liftNo = false;
    
    for(let i=0; i< floors.length; i++){
@@ -73,6 +79,7 @@ function moveLift(destination, liftNo) {
   flip.append(destination ,TOTALLIFTS[liftNo]); //append
   const delta = flip.invert(TOTALLIFTS[liftNo]);
   flip.play(TOTALLIFTS[liftNo],delta);
+
   }
  }
 
@@ -97,7 +104,7 @@ class Flip {
 
   play(el ,delta) {
     requestAnimationFrame(function () {
-      el.style.transition = `all ${Math.abs(delta * 2)}ms ease-in-out`;
+      el.style.transition = `all ${Math.abs(delta * 3)}ms ease-in-out`;
       el.style.transform = "none";
     });
   }
