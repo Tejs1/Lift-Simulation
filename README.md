@@ -19,3 +19,7 @@ Create a web app where you can simulate lift mechanics for a client
    - Lift moving at 2s per floor
    - Lift stopping at every floor where it was called
    - Mobile friendly design
+   - add button state when clicked and if lift is arriving 
+   - add menu in lift itself?
+   - maintainence state
+   
