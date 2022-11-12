@@ -20,7 +20,7 @@ Create a web app where you can simulate lift mechanics for a client
    - Mobile friendly design
    
 ## Extras
-- [x] Add button state when clicked and if lift is arriving 
+- [ ] Add button state when clicked and if lift is arriving 
 - [ ] Add menu in lift itself?
-- [x] Maintainence state
-- [x] scrubbing input scrubbing https://css-tricks.com/number-scrubbing/
+- [ ] Maintainence state
+- [ ] scrubbing input scrubbing https://css-tricks.com/number-scrubbing/
