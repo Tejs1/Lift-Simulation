@@ -14,11 +14,12 @@ function startGame(e) {
 
   console.log(TOTAL_LIFTS);
   setInterval(() => {
-    console.log(getIdleLifts(TOTAL_LIFTS));
-    // if (TASK_QUEUE.length) {
-    //   const destination = TASK_QUEUE.shift();
-    // }
-  }, 3000);
+    // console.log(getIdleLifts(TOTAL_LIFTS));
+    if (TASK_QUEUE.length) {
+      console.log(TASK_QUEUE);
+      TASK_QUEUE.forEach((destination) => findAndCallLift(destination));
+    }
+  }, 2000);
 }
 function inputHandler(e) {
   const inputs = document.querySelectorAll("input");
@@ -26,6 +27,7 @@ function inputHandler(e) {
   createBuilding(numberOfFloors, numberOfLifts);
   play();
 }
+
 function inputValidator(e) {
   const currentInput = e.target;
   switch (currentInput.id) {
@@ -78,9 +80,11 @@ function play() {
   buttons = document.querySelectorAll("button");
 
   const allFlips = {};
+  let floorWidth = document.querySelector(".lift-path").offsetWidth;
 
   lifts.forEach((lift, idx) => {
     TOTAL_LIFTS.push(lift);
+    lift.style.width = `${floorWidth / lifts.length - 20}px`;
     lift.style.left = `${(100 / lifts.length) * idx}%`;
     lift.addEventListener("transitionend", (e) => {
       // idleLifts.push(e.target);
@@ -97,11 +101,11 @@ function addToQueue(e) {
   const destination = getCurrentControllerFloor(e.target);
   TASK_QUEUE.push(destination);
   console.log(TASK_QUEUE);
-  findAndCallLift(e);
 }
-function findAndCallLift(e) {
-  const btnDirection = e.target.className;
-  const destination = getCurrentControllerFloor(e.target);
+
+function findAndCallLift(destination) {
+  // const btnDirection = e.target.className;
+  // const destination = getCurrentControllerFloor(e.target);
   // console.log("destination" + destination);
   const liftNo = getLift(destination);
   // log("nearlift " + liftNo);
@@ -154,13 +158,18 @@ function moveLift(destination, liftNo) {
     flip.first(TOTAL_LIFTS[liftNo]);
     flip.append(destination, TOTAL_LIFTS[liftNo]); //append
     const delta = flip.invert(TOTAL_LIFTS[liftNo]);
+    TASK_QUEUE = TASK_QUEUE.filter(function (value) {
+      return value !== destination;
+    });
     flip.play(TOTAL_LIFTS[liftNo], delta);
   }
 }
 
 function getIdleLifts(lifts) {
   lifts.forEach((lift) => {
-    if (lift.classList.contains("moving")) log(lift);
+    if (!lift.classList.contains("moving")) {
+      log(lift);
+    }
   });
 }
 
