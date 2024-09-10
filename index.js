@@ -33,6 +33,7 @@ class Lift {
 		this.queue = [];
 		this.doorState = 'closed'; // "opening", "closing", "open", "closed"
 		this.previousState = {}; // To track changes
+		this.isServicingFloor = false;
 	}
 
 	getState() {
@@ -64,7 +65,11 @@ class Lift {
 	}
 
 	move() {
-		if (this.queue.length === 0 || this.doorState !== 'closed') {
+		if (
+			this.queue.length === 0 ||
+			this.doorState !== 'closed' ||
+			this.isServicingFloor
+		) {
 			// Don't move if the door is not closed or there are no stops
 			return;
 		}
@@ -108,6 +113,7 @@ class Lift {
 	arriveAtFloor(floor) {
 		console.log(`Lift ${this.liftNumber} arrived at floor ${floor}`);
 		this.state = 'stopped';
+		this.isServicingFloor = true;
 		this.openDoor();
 	}
 
@@ -134,6 +140,7 @@ class Lift {
 		setTimeout(() => {
 			this.doorState = 'closed';
 			this.queue.shift(); // Remove floor from queue after stopping
+			this.isServicingFloor = false;
 			if (this.queue.length > 0) {
 				this.move(); // Move to the next stop in the queue
 			} else {
@@ -201,12 +208,12 @@ function printStateIfChanged() {
 	for (let lift of system.lifts) {
 		if (lift.stateChanged()) {
 			console.log(`Lift ${lift.liftNumber}:
-   Current floor: ${lift.currentFloor},
-   State: ${lift.state},
-   Door: ${lift.doorState},
-   Direction: ${lift.direction},
-   Queue: [${lift.queue.join(', ')}],
-   TimeStampInMs: ${new Date().getTime()}
+ Current floor: ${lift.currentFloor},
+ State: ${lift.state},
+ Door: ${lift.doorState},
+ Direction: ${lift.direction},
+ Queue: [${lift.queue.join(', ')}],
+ TimeStampInMs: ${new Date().getTime()}
 `);
 		}
 	}
@@ -214,9 +221,6 @@ function printStateIfChanged() {
 
 // Game Loop: Runs every second and prints only if state changes
 function gameLoop() {
-	for (let lift of system.lifts) {
-		lift.move();
-	}
 	printStateIfChanged(); // Print state only when changed
 }
 
