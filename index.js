@@ -32,6 +32,28 @@ class Lift {
 		this.state = 'stopped'; // "moving", "stopped", "opening", "closing"
 		this.queue = [];
 		this.doorState = 'closed'; // "opening", "closing", "open", "closed"
+		this.previousState = {}; // To track changes
+	}
+
+	getState() {
+		return {
+			liftNumber: this.liftNumber,
+			currentFloor: this.currentFloor,
+			state: this.state,
+			doorState: this.doorState,
+			direction: this.direction,
+			queue: [...this.queue],
+		};
+	}
+
+	stateChanged() {
+		const currentState = this.getState();
+		const hasChanged =
+			JSON.stringify(currentState) !== JSON.stringify(this.previousState);
+		if (hasChanged) {
+			this.previousState = currentState; // Update previous state
+		}
+		return hasChanged;
 	}
 
 	addStop(floor) {
@@ -154,26 +176,27 @@ class LiftSystem {
 let numFloors = 10;
 let numLifts = 3;
 let system = new LiftSystem(numFloors, numLifts);
-
-// Debug function to print the state of the system
-function printAppState() {
-	console.log('System state:');
+const timestamp = new Date().toLocaleTimeString();
+// Debug function to print the state of the system when it changes
+function printStateIfChanged() {
 	for (let lift of system.lifts) {
-		console.log(`Lift ${lift.liftNumber}: 
+		if (lift.stateChanged()) {
+			console.log(`${Date.now()} - \nLift ${lift.liftNumber}: 
       Current floor: ${lift.currentFloor}, 
       State: ${lift.state}, 
       Door: ${lift.doorState}, 
       Direction: ${lift.direction}, 
       Queue: [${lift.queue.join(', ')}]`);
+		}
 	}
 }
 
-// Game Loop: Runs every second
+// Game Loop: Runs every second and prints only if state changes
 function gameLoop() {
 	for (let lift of system.lifts) {
 		lift.move();
 	}
-	printAppState(); // Print state after each loop
+	printStateIfChanged(); // Print state only when changed
 }
 
 // Example: Simulate a few lift calls
@@ -182,4 +205,4 @@ system.callLift(3, 'down');
 system.callLift(8, 'up');
 
 // Run the game loop every second
-setInterval(gameLoop, 200);
+setInterval(gameLoop, 100);
