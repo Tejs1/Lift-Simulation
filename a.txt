@@ -1,65 +1,200 @@
-Lift 0:
+➜  Lift-Simulation git:(dev) ✗ node index.js
+1725994297458
+
+      Lift 0:
       Current floor: 0,
       State: moving,
       Door: closed,
       Direction: up,
       Queue: [3, 5, 8]
-Lift 1:
+1725994297465
+
+      Lift 1:
       Current floor: 0,
       State: stopped,
       Door: closed,
       Direction: idle,
       Queue: []
-Lift 2:
+1725994297465
+
+      Lift 2:
       Current floor: 0,
       State: stopped,
       Door: closed,
       Direction: idle,
       Queue: []
-Lift 0:
+1725994298459
+
+      Lift 0:
       Current floor: 1,
       State: moving,
       Door: closed,
       Direction: up,
       Queue: [3, 5, 8]
-Lift 0:
+1725994298658
+
+      Lift 0:
+      Current floor: 2,
+      State: moving,
+      Door: closed,
+      Direction: up,
+      Queue: [3, 5, 8]
+1725994298859
+
+      Lift 0:
       Current floor: 3,
       State: stopped,
       Door: opening,
       Direction: up,
       Queue: [3, 5, 8]
-Lift 0:
+1725994299059
+
+      Lift 0:
       Current floor: 4,
       State: moving,
+      Door: opening,
+      Direction: down,
+      Queue: [3, 5, 8]
+1725994299259
+
+      Lift 0:
+      Current floor: 3,
+      State: stopped,
+      Door: opening,
+      Direction: down,
+      Queue: [3, 5, 8]
+1725994299460
+
+      Lift 0:
+      Current floor: 3,
+      State: stopped,
+      Door: opening,
+      Direction: up,
+      Queue: [3, 5, 8]
+1725994299660
+
+      Lift 0:
+      Current floor: 3,
+      State: stopped,
+      Door: opening,
+      Direction: down,
+      Queue: [3, 5, 8]
+1725994299860
+
+      Lift 0:
+      Current floor: 3,
+      State: stopped,
       Door: open,
       Direction: down,
       Queue: [3, 5, 8]
-Lift 0:
-      Current floor: 2,
-      State: moving,
+1725994300060
+
+      Lift 0:
+      Current floor: 3,
+      State: stopped,
       Door: opening,
       Direction: up,
-      Queue: [5, 8]
-Lift 0:
+      Queue: [3, 5, 8]
+1725994300259
+
+      Lift 0:
+      Current floor: 3,
+      State: stopped,
+      Door: open,
+      Direction: up,
+      Queue: [3, 5, 8]
+1725994300460
+
+      Lift 0:
       Current floor: 4,
       State: moving,
-      Door: open,
+      Door: closing,
+      Direction: down,
+      Queue: [3, 5, 8]
+1725994300660
+
+      Lift 0:
+      Current floor: 3,
+      State: stopped,
+      Door: opening,
+      Direction: down,
+      Queue: [3, 5, 8]
+1725994300859
+
+      Lift 0:
+      Current floor: 3,
+      State: moving,
+      Door: closed,
       Direction: up,
       Queue: [5, 8]
-Lift 0:
-      Current floor: 8,
+1725994301060
+
+      Lift 0:
+      Current floor: 4,
       State: moving,
-      Door: open,
+      Door: closing,
       Direction: up,
-      Queue: [8]
-Lift 0:
-      Current floor: 9,
+      Queue: [5, 8]
+1725994301460
+
+      Lift 0:
+      Current floor: 5,
+      State: stopped,
+      Door: closed,
+      Direction: idle,
+      Queue: []
+1725994301860
+
+      Lift 0:
+      Current floor: 5,
+      State: stopped,
+      Door: opening,
+      Direction: idle,
+      Queue: []
+1725994302261
+
+      Lift 0:
+      Current floor: 5,
       State: stopped,
       Door: closing,
       Direction: idle,
       Queue: []
-Lift 0:
-      Current floor: 9,
+1725994302462
+
+      Lift 0:
+      Current floor: 5,
+      State: stopped,
+      Door: open,
+      Direction: idle,
+      Queue: []
+1725994302661
+
+      Lift 0:
+      Current floor: 5,
+      State: stopped,
+      Door: closed,
+      Direction: idle,
+      Queue: []
+1725994302862
+
+      Lift 0:
+      Current floor: 5,
+      State: stopped,
+      Door: open,
+      Direction: idle,
+      Queue: []
+1725994303462
+
+      Lift 0:
+      Current floor: 5,
+      State: stopped,
+      Door: closing,
+      Direction: idle,
+      Queue: []
+1725994303862
+
+      Lift 0:
+      Current floor: 5,
       State: stopped,
       Door: closed,
       Direction: idle,

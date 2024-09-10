@@ -102,10 +102,6 @@ class Lift {
 	arriveAtFloor(floor) {
 		this.state = 'stopped';
 		this.openDoor();
-		setTimeout(() => {
-			this.queue.shift(); // Remove floor from queue after stopping
-			this.closeDoor();
-		}, 1500); // Wait 1 second with door open
 	}
 
 	openDoor() {
@@ -113,14 +109,27 @@ class Lift {
 		setTimeout(() => {
 			this.doorState = 'open';
 			this.state = 'stopped';
+			this.stayOpen();
 		}, 500); // Opening door takes 0.5 seconds
+	}
+
+	stayOpen() {
+		setTimeout(() => {
+			this.closeDoor();
+		}, 1000); // Stay open for 1 second
 	}
 
 	closeDoor() {
 		this.doorState = 'closing';
 		setTimeout(() => {
 			this.doorState = 'closed';
-			this.move(); // Move to the next stop in the queue
+			this.queue.shift(); // Remove floor from queue after stopping
+			if (this.queue.length > 0) {
+				this.move(); // Move to the next stop in the queue
+			} else {
+				this.direction = 'idle'; // Set direction to idle if no more tasks
+				this.state = 'stopped'; // Set the lift state to stopped
+			}
 		}, 500); // Closing door takes 0.5 seconds
 	}
 }
@@ -176,12 +185,13 @@ class LiftSystem {
 let numFloors = 10;
 let numLifts = 3;
 let system = new LiftSystem(numFloors, numLifts);
-const timestamp = new Date().toLocaleTimeString();
+
 // Debug function to print the state of the system when it changes
 function printStateIfChanged() {
 	for (let lift of system.lifts) {
 		if (lift.stateChanged()) {
-			console.log(`${Date.now()} - \nLift ${lift.liftNumber}: 
+			console.log(`${Date.now()}\n
+      Lift ${lift.liftNumber}: 
       Current floor: ${lift.currentFloor}, 
       State: ${lift.state}, 
       Door: ${lift.doorState}, 
@@ -205,4 +215,4 @@ system.callLift(3, 'down');
 system.callLift(8, 'up');
 
 // Run the game loop every second
-setInterval(gameLoop, 100);
+setInterval(gameLoop, 200);
