@@ -70,7 +70,7 @@ class Lift {
 			this.doorState !== 'closed' ||
 			this.isServicingFloor
 		) {
-			// Don't move if the door is not closed or there are no stops
+			// Don't move if the door is not closed, there are no stops, or we're servicing a floor
 			return;
 		}
 
@@ -84,6 +84,9 @@ class Lift {
 			this.state = 'moving';
 			this.direction = 'down';
 			this.travelTo(nextStop);
+		} else {
+			// We're already at the next stop
+			this.arriveAtFloor(nextStop);
 		}
 	}
 
@@ -197,8 +200,19 @@ class LiftSystem {
 
 		this.floors[floorNumber].clearCall(direction);
 	}
-}
 
+	startLifts() {
+		for (let lift of this.lifts) {
+			if (
+				lift.queue.length > 0 &&
+				lift.state === 'stopped' &&
+				!lift.isServicingFloor
+			) {
+				lift.move();
+			}
+		}
+	}
+}
 let numFloors = 10;
 let numLifts = 3;
 let system = new LiftSystem(numFloors, numLifts);
@@ -219,8 +233,9 @@ function printStateIfChanged() {
 	}
 }
 
-// Game Loop: Runs every second and prints only if state changes
+// Game Loop: Runs every 400ms and prints only if state changes
 function gameLoop() {
+	system.startLifts(); // Start lifts if they have stops in their queue
 	printStateIfChanged(); // Print state only when changed
 }
 
@@ -229,5 +244,5 @@ system.callLift(5, 'up');
 system.callLift(3, 'down');
 system.callLift(8, 'up');
 
-// Run the game loop every second
+// Run the game loop every 400ms
 setInterval(gameLoop, 400);
