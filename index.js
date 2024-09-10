@@ -64,9 +64,8 @@ class Lift {
 	}
 
 	move() {
-		if (this.queue.length === 0) {
-			this.state = 'stopped';
-			this.direction = 'idle';
+		if (this.queue.length === 0 || this.doorState !== 'closed') {
+			// Don't move if the door is not closed or there are no stops
 			return;
 		}
 
@@ -84,6 +83,7 @@ class Lift {
 	}
 
 	travelTo(floor) {
+		console.log(`Lift ${this.liftNumber} moving to floor ${floor}`);
 		setTimeout(() => {
 			// Only move to the next floor after the previous stop has been handled
 			if (this.direction === 'up') {
@@ -94,19 +94,25 @@ class Lift {
 
 			// Check if we arrived at the floor
 			if (this.currentFloor === floor) {
+				console.log(`Lift ${this.liftNumber} reached floor ${floor}`);
 				this.arriveAtFloor(floor);
 			} else {
+				console.log(
+					`Lift ${this.liftNumber} passed floor ${this.currentFloor}`,
+				);
 				this.move(); // Continue moving if we haven't reached the target floor
 			}
 		}, 1000); // Move one floor every second
 	}
 
 	arriveAtFloor(floor) {
+		console.log(`Lift ${this.liftNumber} arrived at floor ${floor}`);
 		this.state = 'stopped';
 		this.openDoor();
 	}
 
 	openDoor() {
+		console.log(`Lift ${this.liftNumber} opening door`);
 		this.doorState = 'opening';
 		setTimeout(() => {
 			this.doorState = 'open';
@@ -116,12 +122,14 @@ class Lift {
 	}
 
 	stayOpen() {
+		console.log(`Lift ${this.liftNumber} door is open`);
 		setTimeout(() => {
 			this.closeDoor();
 		}, 1000); // Stay open for 1 second
 	}
 
 	closeDoor() {
+		console.log(`Lift ${this.liftNumber} closing door`);
 		this.doorState = 'closing';
 		setTimeout(() => {
 			this.doorState = 'closed';
@@ -218,4 +226,4 @@ system.callLift(3, 'down');
 system.callLift(8, 'up');
 
 // Run the game loop every second
-setInterval(gameLoop, 200);
+setInterval(gameLoop, 400);
