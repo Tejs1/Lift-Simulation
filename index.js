@@ -85,18 +85,20 @@ class Lift {
 
 	travelTo(floor) {
 		setTimeout(() => {
+			// Only move to the next floor after the previous stop has been handled
 			if (this.direction === 'up') {
 				this.currentFloor++;
 			} else if (this.direction === 'down') {
 				this.currentFloor--;
 			}
 
+			// Check if we arrived at the floor
 			if (this.currentFloor === floor) {
 				this.arriveAtFloor(floor);
 			} else {
-				this.move();
+				this.move(); // Continue moving if we haven't reached the target floor
 			}
-		}, 1000);
+		}, 1000); // Move one floor every second
 	}
 
 	arriveAtFloor(floor) {
@@ -190,13 +192,14 @@ let system = new LiftSystem(numFloors, numLifts);
 function printStateIfChanged() {
 	for (let lift of system.lifts) {
 		if (lift.stateChanged()) {
-			console.log(`${Date.now()}\n
-      Lift ${lift.liftNumber}: 
-      Current floor: ${lift.currentFloor}, 
-      State: ${lift.state}, 
-      Door: ${lift.doorState}, 
-      Direction: ${lift.direction}, 
-      Queue: [${lift.queue.join(', ')}]`);
+			console.log(`Lift ${lift.liftNumber}:
+   Current floor: ${lift.currentFloor},
+   State: ${lift.state},
+   Door: ${lift.doorState},
+   Direction: ${lift.direction},
+   Queue: [${lift.queue.join(', ')}],
+   TimeStampInMs: ${new Date().getTime()}
+`);
 		}
 	}
 }
