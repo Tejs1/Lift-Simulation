@@ -74,8 +74,6 @@ class Lift {
 			} else {
 				this.move();
 			}
-
-			printAppState(); // Update state after each movement
 		}, 1000);
 	}
 
@@ -93,7 +91,6 @@ class Lift {
 		setTimeout(() => {
 			this.doorState = 'open';
 			this.state = 'stopped';
-			printAppState(); // Update state after door opens
 		}, 500); // Opening door takes 0.5 seconds
 	}
 
@@ -101,7 +98,6 @@ class Lift {
 		this.doorState = 'closing';
 		setTimeout(() => {
 			this.doorState = 'closed';
-			printAppState(); // Update state after door closes
 			this.move(); // Move to the next stop in the queue
 		}, 500); // Closing door takes 0.5 seconds
 	}
@@ -172,7 +168,18 @@ function printAppState() {
 	}
 }
 
-// Example usage
+// Game Loop: Runs every second
+function gameLoop() {
+	for (let lift of system.lifts) {
+		lift.move();
+	}
+	printAppState(); // Print state after each loop
+}
+
+// Example: Simulate a few lift calls
 system.callLift(5, 'up');
-// system.callLift(3, 'down');
-// system.callLift(8, 'up');
+system.callLift(3, 'down');
+system.callLift(8, 'up');
+
+// Run the game loop every second
+setInterval(gameLoop, 200);
