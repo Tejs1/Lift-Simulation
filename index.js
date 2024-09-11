@@ -28,7 +28,8 @@ class Lift {
 		this.currentFloor = 0;
 		this.direction = 'idle'; // "up", "down", or "idle"
 		this.state = 'stopped'; // "moving", "stopped", "opening", "closing"
-		this.queue = [];
+		this.upQueue = [];
+		this.downQueue = [];
 		this.doorState = 'closed'; // "opening", "closing", "open", "closed"
 		this.previousState = {}; // To track changes
 		this.isServicingFloor = false;
@@ -41,7 +42,8 @@ class Lift {
 			state: this.state,
 			doorState: this.doorState,
 			direction: this.direction,
-			queue: [...this.queue],
+			upQueue: [...this.upQueue],
+			downQueue: [...this.downQueue],
 		};
 	}
 
@@ -56,55 +58,76 @@ class Lift {
 	}
 
 	addStop(floor) {
-		if (!this.queue.includes(floor)) {
-			this.queue.push(floor);
-			this.queue.sort((a, b) => (this.direction === 'up' ? a - b : b - a));
+		if (
+			this.direction === 'up' ||
+			(this.direction === 'idle' && floor > this.currentFloor)
+		) {
+			if (!this.upQueue.includes(floor)) {
+				this.upQueue.push(floor);
+				this.upQueue.sort((a, b) => a - b);
+			}
+		} else {
+			if (!this.downQueue.includes(floor)) {
+				this.downQueue.push(floor);
+				this.downQueue.sort((a, b) => b - a);
+			}
 		}
 	}
 
 	move() {
-		if (
-			this.queue.length === 0 ||
-			this.doorState !== 'closed' ||
-			this.isServicingFloor
-		) {
-			// Don't move if the door is not closed, there are no stops, or we're servicing a floor
+		if (this.isServicingFloor || this.doorState !== 'closed') {
 			return;
 		}
 
-		const nextStop = this.queue[0];
-
-		if (this.currentFloor !== nextStop) {
-			this.state = 'moving';
-			this.direction = this.currentFloor < nextStop ? 'up' : 'down';
-			this.travelTo(nextStop);
+		if (this.direction === 'up' && this.upQueue.length > 0) {
+			this.moveToNextFloor(this.upQueue[0]);
+		} else if (this.direction === 'down' && this.downQueue.length > 0) {
+			this.moveToNextFloor(this.downQueue[0]);
+		} else if (this.upQueue.length > 0) {
+			this.direction = 'up';
+			this.moveToNextFloor(this.upQueue[0]);
+		} else if (this.downQueue.length > 0) {
+			this.direction = 'down';
+			this.moveToNextFloor(this.downQueue[0]);
 		} else {
-			this.arriveAtFloor(nextStop);
+			this.direction = 'idle';
+			this.state = 'stopped';
 		}
 	}
 
-	travelTo(floor) {
-		console.log(`Lift ${this.liftNumber} moving to floor ${floor}`);
-		setTimeout(() => {
-			this.currentFloor += this.direction === 'up' ? 1 : -1;
+	moveToNextFloor(targetFloor) {
+		this.state = 'moving';
+		console.log(`Lift ${this.liftNumber} moving to floor ${targetFloor}`);
 
-			if (this.currentFloor === floor) {
-				console.log(`Lift ${this.liftNumber} reached floor ${floor}`);
-				this.arriveAtFloor(floor);
+		const moveOneFloor = () => {
+			if (this.currentFloor < targetFloor) {
+				this.currentFloor++;
+			} else if (this.currentFloor > targetFloor) {
+				this.currentFloor--;
+			}
+
+			if (this.currentFloor === targetFloor) {
+				this.arriveAtFloor(targetFloor);
 			} else {
 				console.log(
 					`Lift ${this.liftNumber} passed floor ${this.currentFloor}`,
 				);
-				this.move();
+				setTimeout(moveOneFloor, 1000);
 			}
-		}, 1000);
+		};
+
+		setTimeout(moveOneFloor, 1000);
 	}
 
 	arriveAtFloor(floor) {
 		console.log(`Lift ${this.liftNumber} arrived at floor ${floor}`);
 		this.state = 'stopped';
 		this.isServicingFloor = true;
-		this.queue.shift(); // Remove the floor from the queue immediately
+		if (this.direction === 'up') {
+			this.upQueue = this.upQueue.filter((f) => f !== floor);
+		} else {
+			this.downQueue = this.downQueue.filter((f) => f !== floor);
+		}
 		this.openDoor();
 	}
 
@@ -114,14 +137,14 @@ class Lift {
 		setTimeout(() => {
 			this.doorState = 'open';
 			this.stayOpen();
-		}, 500); // Opening door takes 0.5 seconds
+		}, 500);
 	}
 
 	stayOpen() {
 		console.log(`Lift ${this.liftNumber} door is open`);
 		setTimeout(() => {
 			this.closeDoor();
-		}, 1000); // Stay open for 1 second
+		}, 1000);
 	}
 
 	closeDoor() {
@@ -130,13 +153,8 @@ class Lift {
 		setTimeout(() => {
 			this.doorState = 'closed';
 			this.isServicingFloor = false;
-			if (this.queue.length > 0) {
-				this.move(); // Move to the next stop in the queue
-			} else {
-				this.direction = 'idle'; // Set direction to idle if no more tasks
-				this.state = 'stopped'; // Set the lift state to stopped
-			}
-		}, 500); // Closing door takes 0.5 seconds
+			this.move();
+		}, 500);
 	}
 }
 
@@ -206,24 +224,19 @@ class LiftSystem {
 		}
 
 		// Consider the number of stops in the lift's queue
-		score += lift.queue.length * 0.1;
+		score += lift.upQueue.length * 0.1 + lift.downQueue.length * 0.1;
 
 		return score;
 	}
 
 	startLifts() {
 		for (let lift of this.lifts) {
-			if (
-				lift.queue.length > 0 &&
-				lift.state === 'stopped' &&
-				!lift.isServicingFloor
-			) {
-				lift.move();
-			}
+			lift.move();
 		}
 	}
 }
 
+// Test code remains the same
 let numFloors = 10;
 let numLifts = 3;
 let system = new LiftSystem(numFloors, numLifts);
@@ -236,7 +249,8 @@ Current floor: ${lift.currentFloor},
 State: ${lift.state},
 Door: ${lift.doorState},
 Direction: ${lift.direction},
-Queue: [${lift.queue.join(', ')}],
+Up Queue: [${lift.upQueue.join(', ')}],
+Down Queue: [${lift.downQueue.join(', ')}],
 TimeStampInMs: ${new Date().getTime()}
 `);
 		}
@@ -244,7 +258,7 @@ TimeStampInMs: ${new Date().getTime()}
 }
 
 function gameLoop() {
-	system.startLifts(); // Start the lifts
+	system.startLifts();
 	printStateIfChanged();
 }
 
@@ -252,6 +266,7 @@ function gameLoop() {
 system.callLift(5, 'up');
 system.callLift(3, 'down');
 system.callLift(8, 'up');
+
 setTimeout(() => {
 	system.callLift(1, 'up');
 	system.callLift(7, 'down');
