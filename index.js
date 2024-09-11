@@ -160,27 +160,12 @@ class LiftSystem {
 		this.floors[floorNumber].callLift(direction);
 
 		let bestLift = null;
-		let minScore = Infinity;
+		let bestScore = Infinity;
 
 		for (let lift of this.lifts) {
-			const distance = Math.abs(lift.currentFloor - floorNumber);
-			let score = distance;
-
-			if (lift.direction === 'idle') {
-				score -= 0.5; // Prefer idle lifts
-			} else if (
-				(direction === 'up' &&
-					lift.direction === 'up' &&
-					lift.currentFloor <= floorNumber) ||
-				(direction === 'down' &&
-					lift.direction === 'down' &&
-					lift.currentFloor >= floorNumber)
-			) {
-				score -= 0.25; // Prefer lifts already moving in the right direction
-			}
-
-			if (score < minScore) {
-				minScore = score;
+			const score = this.calculateLiftScore(lift, floorNumber, direction);
+			if (score < bestScore) {
+				bestScore = score;
 				bestLift = lift;
 			}
 		}
@@ -188,9 +173,42 @@ class LiftSystem {
 		if (bestLift) {
 			bestLift.addStop(floorNumber);
 			console.log(
-				`Lift ${bestLift.liftNumber} assigned to floor ${floorNumber}`,
+				`Lift ${bestLift.liftNumber} assigned to floor ${floorNumber} (${direction})`,
 			);
 		}
+	}
+
+	calculateLiftScore(lift, floorNumber, callDirection) {
+		const distance = Math.abs(lift.currentFloor - floorNumber);
+		let score = distance;
+
+		// Heavily penalize assignment that would require the lift to change direction
+		if (lift.direction === 'up' && floorNumber < lift.currentFloor) {
+			score += this.numFloors * 2;
+		} else if (lift.direction === 'down' && floorNumber > lift.currentFloor) {
+			score += this.numFloors * 2;
+		}
+
+		// Prefer idle lifts
+		if (lift.direction === 'idle') {
+			score -= 0.5;
+		}
+		// Prefer lifts already moving in the right direction
+		else if (
+			(callDirection === 'up' &&
+				lift.direction === 'up' &&
+				lift.currentFloor <= floorNumber) ||
+			(callDirection === 'down' &&
+				lift.direction === 'down' &&
+				lift.currentFloor >= floorNumber)
+		) {
+			score -= 1;
+		}
+
+		// Consider the number of stops in the lift's queue
+		score += lift.queue.length * 0.1;
+
+		return score;
 	}
 
 	startLifts() {

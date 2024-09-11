@@ -1,151 +1,309 @@
-Lift 0 assigned to floor 5
-Lift 0 assigned to floor 3
-Lift 0 assigned to floor 8
-Lift 0 moving to floor 8
+Lift 0 assigned to floor 5 (up)
+Lift 1 assigned to floor 3 (down)
+Lift 2 assigned to floor 8 (up)
+Lift 0 moving to floor 5
+Lift 1 moving to floor 3
+Lift 2 moving to floor 8
 Lift 0:
 Current floor: 0,
 State: moving,
 Door: closed,
 Direction: up,
-Queue: [8, 5, 3],
-TimeStampInMs: 1726084259480
+Queue: [5],
+TimeStampInMs: 1726084715713
 
 Lift 1:
 Current floor: 0,
-State: stopped,
+State: moving,
 Door: closed,
-Direction: idle,
-Queue: [],
-TimeStampInMs: 1726084259480
+Direction: up,
+Queue: [3],
+TimeStampInMs: 1726084715713
 
 Lift 2:
 Current floor: 0,
-State: stopped,
+State: moving,
 Door: closed,
-Direction: idle,
-Queue: [],
-TimeStampInMs: 1726084259481
+Direction: up,
+Queue: [8],
+TimeStampInMs: 1726084715713
 
 Lift 0 passed floor 1
-Lift 0 moving to floor 8
+Lift 0 moving to floor 5
+Lift 1 passed floor 1
+Lift 1 moving to floor 3
+Lift 2 passed floor 1
+Lift 2 moving to floor 8
 Lift 0:
 Current floor: 1,
 State: moving,
 Door: closed,
 Direction: up,
-Queue: [8, 5, 3],
-TimeStampInMs: 1726084260681
+Queue: [5],
+TimeStampInMs: 1726084716913
+
+Lift 1:
+Current floor: 1,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [3],
+TimeStampInMs: 1726084716913
+
+Lift 2:
+Current floor: 1,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [8],
+TimeStampInMs: 1726084716914
 
 Lift 0 passed floor 2
-Lift 0 moving to floor 8
+Lift 0 moving to floor 5
+Lift 1 passed floor 2
+Lift 1 moving to floor 3
+Lift 2 passed floor 2
+Lift 2 moving to floor 8
 Lift 0:
 Current floor: 2,
 State: moving,
 Door: closed,
 Direction: up,
-Queue: [8, 5, 3],
-TimeStampInMs: 1726084261482
-
-Lift 1 assigned to floor 1
-Lift 0 assigned to floor 7
-Lift 0 assigned to floor 4
-Lift 1 moving to floor 1
-Lift 0:
-Current floor: 2,
-State: moving,
-Door: closed,
-Direction: up,
-Queue: [3, 4, 5, 7, 8],
-TimeStampInMs: 1726084262283
+Queue: [5],
+TimeStampInMs: 1726084717715
 
 Lift 1:
-Current floor: 0,
+Current floor: 2,
 State: moving,
 Door: closed,
 Direction: up,
-Queue: [1],
-TimeStampInMs: 1726084262283
+Queue: [3],
+TimeStampInMs: 1726084717715
+
+Lift 2:
+Current floor: 2,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [8],
+TimeStampInMs: 1726084717715
+
+Lift 0 assigned to floor 1 (up)
+Lift 1 assigned to floor 7 (down)
+Lift 2 assigned to floor 4 (down)
+Lift 0:
+Current floor: 2,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [1, 5],
+TimeStampInMs: 1726084718514
+
+Lift 1:
+Current floor: 2,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [3, 7],
+TimeStampInMs: 1726084718514
+
+Lift 2:
+Current floor: 2,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [4, 8],
+TimeStampInMs: 1726084718514
 
 Lift 0 passed floor 3
-Lift 0 arrived at floor 3
-Lift 0 opening door
-Lift 0:
-Current floor: 3,
-State: stopped,
-Door: opening,
-Direction: up,
-Queue: [4, 5, 7, 8],
-TimeStampInMs: 1726084262684
-
-Lift 0 door is open
-Lift 0:
-Current floor: 3,
-State: stopped,
-Door: open,
-Direction: up,
-Queue: [4, 5, 7, 8],
-TimeStampInMs: 1726084263084
-
-Lift 1 reached floor 1
-Lift 1 arrived at floor 1
+Lift 0 moving to floor 1
+Lift 1 reached floor 3
+Lift 1 arrived at floor 3
 Lift 1 opening door
-Lift 1:
-Current floor: 1,
-State: stopped,
-Door: opening,
-Direction: up,
-Queue: [],
-TimeStampInMs: 1726084263485
-
-Lift 1 door is open
-Lift 1:
-Current floor: 1,
-State: stopped,
-Door: open,
-Direction: up,
-Queue: [],
-TimeStampInMs: 1726084263886
-
-Lift 0 closing door
-Lift 1 assigned to floor 1
-Lift 0 assigned to floor 2
-Lift 1 assigned to floor 1
-Lift 0:
-Current floor: 3,
-State: stopped,
-Door: closing,
-Direction: up,
-Queue: [2, 4, 5, 7, 8],
-TimeStampInMs: 1726084264285
-
-Lift 1:
-Current floor: 1,
-State: stopped,
-Door: open,
-Direction: up,
-Queue: [1],
-TimeStampInMs: 1726084264285
-
-Lift 0 moving to floor 2
+Lift 2 passed floor 3
+Lift 2 moving to floor 4
 Lift 0:
 Current floor: 3,
 State: moving,
 Door: closed,
 Direction: down,
-Queue: [2, 4, 5, 7, 8],
-TimeStampInMs: 1726084264685
+Queue: [1, 5],
+TimeStampInMs: 1726084718915
 
-Lift 1 closing door
 Lift 1:
-Current floor: 1,
+Current floor: 3,
+State: stopped,
+Door: opening,
+Direction: up,
+Queue: [7],
+TimeStampInMs: 1726084718915
+
+Lift 2:
+Current floor: 3,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [4, 8],
+TimeStampInMs: 1726084718915
+
+Lift 1 door is open
+Lift 1:
+Current floor: 3,
+State: stopped,
+Door: open,
+Direction: up,
+Queue: [7],
+TimeStampInMs: 1726084719314
+
+Lift 0 passed floor 2
+Lift 0 moving to floor 1
+Lift 2 reached floor 4
+Lift 2 arrived at floor 4
+Lift 2 opening door
+Lift 0:
+Current floor: 2,
+State: moving,
+Door: closed,
+Direction: down,
+Queue: [1, 5],
+TimeStampInMs: 1726084720116
+
+Lift 2:
+Current floor: 4,
+State: stopped,
+Door: opening,
+Direction: up,
+Queue: [8],
+TimeStampInMs: 1726084720116
+
+Lift 2 door is open
+Lift 1 closing door
+Lift 0 assigned to floor 1 (up)
+Lift 0 assigned to floor 2 (down)
+Lift 0 assigned to floor 1 (down)
+Lift 0:
+Current floor: 2,
+State: moving,
+Door: closed,
+Direction: down,
+Queue: [5, 2, 1],
+TimeStampInMs: 1726084720516
+
+Lift 1:
+Current floor: 3,
 State: stopped,
 Door: closing,
 Direction: up,
-Queue: [1],
-TimeStampInMs: 1726084265086
+Queue: [7],
+TimeStampInMs: 1726084720516
 
-Lift 1 arrived at floor 1
-Lift 1 opening door
+Lift 2:
+Current floor: 4,
+State: stopped,
+Door: open,
+Direction: up,
+Queue: [8],
+TimeStampInMs: 1726084720516
+
+Lift 1 moving to floor 7
+Lift 0 reached floor 1
+Lift 0 arrived at floor 1
+Lift 0 opening door
+Lift 0:
+Current floor: 1,
+State: stopped,
+Door: opening,
+Direction: down,
+Queue: [2, 1],
+TimeStampInMs: 1726084720916
+
+Lift 1:
+Current floor: 3,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [7],
+TimeStampInMs: 1726084720916
+
+Lift 2 closing door
+Lift 0 door is open
+Lift 0:
+Current floor: 1,
+State: stopped,
+Door: open,
+Direction: down,
+Queue: [2, 1],
+TimeStampInMs: 1726084721317
+
+Lift 2:
+Current floor: 4,
+State: stopped,
+Door: closing,
+Direction: up,
+Queue: [8],
+TimeStampInMs: 1726084721317
+
+Lift 1 passed floor 4
+Lift 1 moving to floor 7
+Lift 2 moving to floor 8
+Lift 1:
+Current floor: 4,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [7],
+TimeStampInMs: 1726084721718
+
+Lift 2:
+Current floor: 4,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [8],
+TimeStampInMs: 1726084721718
+
+Lift 0 closing door
+Lift 0:
+Current floor: 1,
+State: stopped,
+Door: closing,
+Direction: down,
+Queue: [2, 1],
+TimeStampInMs: 1726084722519
+
+Lift 1 passed floor 5
+Lift 1 moving to floor 7
+Lift 2 passed floor 5
+Lift 2 moving to floor 8
+Lift 0 moving to floor 2
+Lift 0:
+Current floor: 1,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [2, 1],
+TimeStampInMs: 1726084722919
+
+Lift 1:
+Current floor: 5,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [7],
+TimeStampInMs: 1726084722919
+
+Lift 2:
+Current floor: 5,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [8],
+TimeStampInMs: 1726084722919
+
+Lift 1 passed floor 6
+Lift 1 moving to floor 7
+Lift 2 passed floor 6
+Lift 2 moving to floor 8
 Lift 0 reached floor 2
 Lift 0 arrived at floor 2
 Lift 0 opening door
@@ -153,239 +311,171 @@ Lift 0:
 Current floor: 2,
 State: stopped,
 Door: opening,
-Direction: down,
-Queue: [4, 5, 7, 8],
-TimeStampInMs: 1726084265486
+Direction: up,
+Queue: [1],
+TimeStampInMs: 1726084723719
 
 Lift 1:
-Current floor: 1,
-State: stopped,
-Door: opening,
-Direction: up,
-Queue: [],
-TimeStampInMs: 1726084265486
-
-Lift 1 door is open
-Lift 1:
-Current floor: 1,
-State: stopped,
-Door: open,
-Direction: up,
-Queue: [],
-TimeStampInMs: 1726084265885
-
-Lift 0 door is open
-Lift 0:
-Current floor: 2,
-State: stopped,
-Door: open,
-Direction: down,
-Queue: [4, 5, 7, 8],
-TimeStampInMs: 1726084266286
-
-Lift 1 closing door
-Lift 0 closing door
-Lift 0:
-Current floor: 2,
-State: stopped,
-Door: closing,
-Direction: down,
-Queue: [4, 5, 7, 8],
-TimeStampInMs: 1726084267086
-
-Lift 1:
-Current floor: 1,
-State: stopped,
-Door: closing,
-Direction: up,
-Queue: [],
-TimeStampInMs: 1726084267086
-
-Lift 0 moving to floor 4
-Lift 0:
-Current floor: 2,
-State: moving,
-Door: closed,
-Direction: up,
-Queue: [4, 5, 7, 8],
-TimeStampInMs: 1726084267486
-
-Lift 1:
-Current floor: 1,
-State: stopped,
-Door: closed,
-Direction: idle,
-Queue: [],
-TimeStampInMs: 1726084267486
-
-Lift 0 passed floor 3
-Lift 0 moving to floor 4
-Lift 0:
-Current floor: 3,
-State: moving,
-Door: closed,
-Direction: up,
-Queue: [4, 5, 7, 8],
-TimeStampInMs: 1726084268687
-
-Lift 0 reached floor 4
-Lift 0 arrived at floor 4
-Lift 0 opening door
-Lift 0:
-Current floor: 4,
-State: stopped,
-Door: opening,
-Direction: up,
-Queue: [5, 7, 8],
-TimeStampInMs: 1726084269488
-
-Lift 0 door is open
-Lift 0:
-Current floor: 4,
-State: stopped,
-Door: open,
-Direction: up,
-Queue: [5, 7, 8],
-TimeStampInMs: 1726084270288
-
-Lift 0 closing door
-Lift 0:
-Current floor: 4,
-State: stopped,
-Door: closing,
-Direction: up,
-Queue: [5, 7, 8],
-TimeStampInMs: 1726084271088
-
-Lift 0 moving to floor 5
-Lift 0:
-Current floor: 4,
-State: moving,
-Door: closed,
-Direction: up,
-Queue: [5, 7, 8],
-TimeStampInMs: 1726084271489
-
-Lift 0 reached floor 5
-Lift 0 arrived at floor 5
-Lift 0 opening door
-Lift 0:
-Current floor: 5,
-State: stopped,
-Door: opening,
-Direction: up,
-Queue: [7, 8],
-TimeStampInMs: 1726084272690
-
-Lift 0 door is open
-Lift 0:
-Current floor: 5,
-State: stopped,
-Door: open,
-Direction: up,
-Queue: [7, 8],
-TimeStampInMs: 1726084273091
-
-Lift 0 closing door
-Lift 0:
-Current floor: 5,
-State: stopped,
-Door: closing,
-Direction: up,
-Queue: [7, 8],
-TimeStampInMs: 1726084274290
-
-Lift 0 moving to floor 7
-Lift 0:
-Current floor: 5,
-State: moving,
-Door: closed,
-Direction: up,
-Queue: [7, 8],
-TimeStampInMs: 1726084274691
-
-Lift 0 passed floor 6
-Lift 0 moving to floor 7
-Lift 0:
 Current floor: 6,
 State: moving,
 Door: closed,
 Direction: up,
-Queue: [7, 8],
-TimeStampInMs: 1726084275491
+Queue: [7],
+TimeStampInMs: 1726084723719
 
-Lift 0 reached floor 7
-Lift 0 arrived at floor 7
-Lift 0 opening door
+Lift 2:
+Current floor: 6,
+State: moving,
+Door: closed,
+Direction: up,
+Queue: [8],
+TimeStampInMs: 1726084723719
+
+Lift 0 door is open
 Lift 0:
+Current floor: 2,
+State: stopped,
+Door: open,
+Direction: up,
+Queue: [1],
+TimeStampInMs: 1726084724520
+
+Lift 1 reached floor 7
+Lift 1 arrived at floor 7
+Lift 1 opening door
+Lift 2 passed floor 7
+Lift 2 moving to floor 8
+Lift 1:
 Current floor: 7,
 State: stopped,
 Door: opening,
 Direction: up,
-Queue: [8],
-TimeStampInMs: 1726084276692
+Queue: [],
+TimeStampInMs: 1726084724921
 
-Lift 0 door is open
-Lift 0:
-Current floor: 7,
-State: stopped,
-Door: open,
-Direction: up,
-Queue: [8],
-TimeStampInMs: 1726084277092
-
-Lift 0 closing door
-Lift 0:
-Current floor: 7,
-State: stopped,
-Door: closing,
-Direction: up,
-Queue: [8],
-TimeStampInMs: 1726084278294
-
-Lift 0 moving to floor 8
-Lift 0:
+Lift 2:
 Current floor: 7,
 State: moving,
 Door: closed,
 Direction: up,
 Queue: [8],
-TimeStampInMs: 1726084278693
+TimeStampInMs: 1726084724921
 
-Lift 0 reached floor 8
-Lift 0 arrived at floor 8
-Lift 0 opening door
+Lift 1 door is open
+Lift 0 closing door
 Lift 0:
+Current floor: 2,
+State: stopped,
+Door: closing,
+Direction: up,
+Queue: [1],
+TimeStampInMs: 1726084725321
+
+Lift 1:
+Current floor: 7,
+State: stopped,
+Door: open,
+Direction: up,
+Queue: [],
+TimeStampInMs: 1726084725321
+
+Lift 0 moving to floor 1
+Lift 2 reached floor 8
+Lift 2 arrived at floor 8
+Lift 2 opening door
+Lift 0:
+Current floor: 2,
+State: moving,
+Door: closed,
+Direction: down,
+Queue: [1],
+TimeStampInMs: 1726084725720
+
+Lift 2:
 Current floor: 8,
 State: stopped,
 Door: opening,
 Direction: up,
 Queue: [],
-TimeStampInMs: 1726084282136
+TimeStampInMs: 1726084725721
 
-Lift 0 door is open
-Lift 0:
+Lift 1 closing door
+Lift 2 door is open
+Lift 1:
+Current floor: 7,
+State: stopped,
+Door: closing,
+Direction: up,
+Queue: [],
+TimeStampInMs: 1726084726520
+
+Lift 2:
 Current floor: 8,
 State: stopped,
 Door: open,
 Direction: up,
 Queue: [],
-TimeStampInMs: 1726084282936
+TimeStampInMs: 1726084726521
 
-Lift 0 closing door
+Lift 0 reached floor 1
+Lift 0 arrived at floor 1
+Lift 0 opening door
 Lift 0:
+Current floor: 1,
+State: stopped,
+Door: opening,
+Direction: down,
+Queue: [],
+TimeStampInMs: 1726084726920
+
+Lift 1:
+Current floor: 7,
+State: stopped,
+Door: closed,
+Direction: idle,
+Queue: [],
+TimeStampInMs: 1726084726920
+
+Lift 2 closing door
+Lift 0 door is open
+Lift 0:
+Current floor: 1,
+State: stopped,
+Door: open,
+Direction: down,
+Queue: [],
+TimeStampInMs: 1726084727321
+
+Lift 2:
 Current floor: 8,
 State: stopped,
 Door: closing,
 Direction: up,
 Queue: [],
-TimeStampInMs: 1726084283736
+TimeStampInMs: 1726084727321
 
-Lift 0:
+Lift 2:
 Current floor: 8,
 State: stopped,
 Door: closed,
 Direction: idle,
 Queue: [],
-TimeStampInMs: 1726084284137
+TimeStampInMs: 1726084727722
+
+Lift 0 closing door
+Lift 0:
+Current floor: 1,
+State: stopped,
+Door: closing,
+Direction: down,
+Queue: [],
+TimeStampInMs: 1726084728523
+
+Lift 0:
+Current floor: 1,
+State: stopped,
+Door: closed,
+Direction: idle,
+Queue: [],
+TimeStampInMs: 1726084728922
 
