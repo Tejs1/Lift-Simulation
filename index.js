@@ -5,14 +5,12 @@ class Floor {
 		this.downCall = false;
 	}
 
-	callLiftUp() {
-		if (this.floorNumber === 0) return; // Can't go up from ground floor
-		this.upCall = true;
-	}
-
-	callLiftDown() {
-		if (this.floorNumber === numFloors - 1) return; // Can't go down from top floor
-		this.downCall = true;
+	callLift(direction) {
+		if (direction === 'up') {
+			this.upCall = true;
+		} else if (direction === 'down') {
+			this.downCall = true;
+		}
 	}
 
 	clearCall(direction) {
@@ -52,7 +50,7 @@ class Lift {
 		const hasChanged =
 			JSON.stringify(currentState) !== JSON.stringify(this.previousState);
 		if (hasChanged) {
-			this.previousState = currentState; // Update previous state
+			this.previousState = currentState;
 		}
 		return hasChanged;
 	}
@@ -60,7 +58,7 @@ class Lift {
 	addStop(floor) {
 		if (!this.queue.includes(floor)) {
 			this.queue.push(floor);
-			this.queue.sort((a, b) => a - b); // Sort stops in ascending order
+			this.queue.sort((a, b) => (this.direction === 'up' ? a - b : b - a));
 		}
 	}
 
@@ -76,16 +74,11 @@ class Lift {
 
 		const nextStop = this.queue[0];
 
-		if (this.currentFloor < nextStop) {
+		if (this.currentFloor !== nextStop) {
 			this.state = 'moving';
-			this.direction = 'up';
-			this.travelTo(nextStop);
-		} else if (this.currentFloor > nextStop) {
-			this.state = 'moving';
-			this.direction = 'down';
+			this.direction = this.currentFloor < nextStop ? 'up' : 'down';
 			this.travelTo(nextStop);
 		} else {
-			// We're already at the next stop
 			this.arriveAtFloor(nextStop);
 		}
 	}
@@ -93,14 +86,8 @@ class Lift {
 	travelTo(floor) {
 		console.log(`Lift ${this.liftNumber} moving to floor ${floor}`);
 		setTimeout(() => {
-			// Only move to the next floor after the previous stop has been handled
-			if (this.direction === 'up') {
-				this.currentFloor++;
-			} else if (this.direction === 'down') {
-				this.currentFloor--;
-			}
+			this.currentFloor += this.direction === 'up' ? 1 : -1;
 
-			// Check if we arrived at the floor
 			if (this.currentFloor === floor) {
 				console.log(`Lift ${this.liftNumber} reached floor ${floor}`);
 				this.arriveAtFloor(floor);
@@ -108,15 +95,16 @@ class Lift {
 				console.log(
 					`Lift ${this.liftNumber} passed floor ${this.currentFloor}`,
 				);
-				this.move(); // Continue moving if we haven't reached the target floor
+				this.move();
 			}
-		}, 1000); // Move one floor every second
+		}, 1000);
 	}
 
 	arriveAtFloor(floor) {
 		console.log(`Lift ${this.liftNumber} arrived at floor ${floor}`);
 		this.state = 'stopped';
 		this.isServicingFloor = true;
+		this.queue.shift(); // Remove the floor from the queue immediately
 		this.openDoor();
 	}
 
@@ -125,7 +113,6 @@ class Lift {
 		this.doorState = 'opening';
 		setTimeout(() => {
 			this.doorState = 'open';
-			this.state = 'stopped';
 			this.stayOpen();
 		}, 500); // Opening door takes 0.5 seconds
 	}
@@ -142,7 +129,6 @@ class Lift {
 		this.doorState = 'closing';
 		setTimeout(() => {
 			this.doorState = 'closed';
-			this.queue.shift(); // Remove floor from queue after stopping
 			this.isServicingFloor = false;
 			if (this.queue.length > 0) {
 				this.move(); // Move to the next stop in the queue
@@ -171,15 +157,18 @@ class LiftSystem {
 	}
 
 	callLift(floorNumber, direction) {
-		// Find the best lift to respond
+		this.floors[floorNumber].callLift(direction);
+
 		let bestLift = null;
-		let minDistance = this.numFloors;
+		let minScore = Infinity;
 
 		for (let lift of this.lifts) {
 			const distance = Math.abs(lift.currentFloor - floorNumber);
+			let score = distance;
 
-			if (
-				lift.direction === 'idle' ||
+			if (lift.direction === 'idle') {
+				score -= 0.5; // Prefer idle lifts
+			} else if (
 				(direction === 'up' &&
 					lift.direction === 'up' &&
 					lift.currentFloor <= floorNumber) ||
@@ -187,18 +176,21 @@ class LiftSystem {
 					lift.direction === 'down' &&
 					lift.currentFloor >= floorNumber)
 			) {
-				if (distance < minDistance) {
-					minDistance = distance;
-					bestLift = lift;
-				}
+				score -= 0.25; // Prefer lifts already moving in the right direction
+			}
+
+			if (score < minScore) {
+				minScore = score;
+				bestLift = lift;
 			}
 		}
 
 		if (bestLift) {
 			bestLift.addStop(floorNumber);
+			console.log(
+				`Lift ${bestLift.liftNumber} assigned to floor ${floorNumber}`,
+			);
 		}
-
-		this.floors[floorNumber].clearCall(direction);
 	}
 
 	startLifts() {
@@ -213,36 +205,46 @@ class LiftSystem {
 		}
 	}
 }
+
 let numFloors = 10;
 let numLifts = 3;
 let system = new LiftSystem(numFloors, numLifts);
 
-// Debug function to print the state of the system when it changes
 function printStateIfChanged() {
 	for (let lift of system.lifts) {
 		if (lift.stateChanged()) {
 			console.log(`Lift ${lift.liftNumber}:
- Current floor: ${lift.currentFloor},
- State: ${lift.state},
- Door: ${lift.doorState},
- Direction: ${lift.direction},
- Queue: [${lift.queue.join(', ')}],
- TimeStampInMs: ${new Date().getTime()}
+Current floor: ${lift.currentFloor},
+State: ${lift.state},
+Door: ${lift.doorState},
+Direction: ${lift.direction},
+Queue: [${lift.queue.join(', ')}],
+TimeStampInMs: ${new Date().getTime()}
 `);
 		}
 	}
 }
 
-// Game Loop: Runs every 400ms and prints only if state changes
 function gameLoop() {
-	system.startLifts(); // Start lifts if they have stops in their queue
-	printStateIfChanged(); // Print state only when changed
+	system.startLifts(); // Start the lifts
+	printStateIfChanged();
 }
 
 // Example: Simulate a few lift calls
 system.callLift(5, 'up');
 system.callLift(3, 'down');
 system.callLift(8, 'up');
+setTimeout(() => {
+	system.callLift(1, 'up');
+	system.callLift(7, 'down');
+	system.callLift(4, 'down');
+}, 3000);
+
+setTimeout(() => {
+	system.callLift(1, 'up');
+	system.callLift(2, 'down');
+	system.callLift(1, 'down');
+}, 5000);
 
 // Run the game loop every 400ms
 setInterval(gameLoop, 400);
