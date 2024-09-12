@@ -164,6 +164,7 @@ class LiftSystem {
 		this.numLifts = numLifts;
 		this.floors = [];
 		this.lifts = [];
+		this.eventListeners = [];
 
 		for (let i = 0; i < numFloors; i++) {
 			this.floors.push(new Floor(i));
@@ -234,50 +235,79 @@ class LiftSystem {
 			lift.move();
 		}
 	}
-}
 
-// Test code remains the same
-let numFloors = 10;
-let numLifts = 3;
-let system = new LiftSystem(numFloors, numLifts);
-
-function printStateIfChanged() {
-	for (let lift of system.lifts) {
-		if (lift.stateChanged()) {
-			console.log(`Lift ${lift.liftNumber}:
-Current floor: ${lift.currentFloor},
-State: ${lift.state},
-Door: ${lift.doorState},
-Direction: ${lift.direction},
-Up Queue: [${lift.upQueue.join(', ')}],
-Down Queue: [${lift.downQueue.join(', ')}],
-TimeStampInMs: ${new Date().getTime()}
-`);
+	attachToDOM(containerId) {
+		const container = document.getElementById(containerId);
+		if (!container) {
+			console.error(`Container with id "${containerId}" not found`);
+			return;
 		}
+
+		// Create building structure
+		const building = document.createElement('div');
+		building.className = 'building';
+
+		// Create floors
+		for (let i = this.numFloors - 1; i >= 0; i--) {
+			const floor = document.createElement('div');
+			floor.className = 'floor';
+			floor.innerHTML = `
+							<div class="floor-number">${i}</div>
+							<button class="call-button up" data-floor="${i}" data-direction="up">↑</button>
+							<button class="call-button down" data-floor="${i}" data-direction="down">↓</button>
+					`;
+			building.appendChild(floor);
+		}
+
+		// Create lifts
+		for (let i = 0; i < this.numLifts; i++) {
+			const lift = document.createElement('div');
+			lift.className = 'lift';
+			lift.id = `lift-${i}`;
+			lift.innerHTML = `
+							<div class="lift-number">${i}</div>
+							<div class="doors">
+									<div class="door left-door"></div>
+									<div class="door right-door"></div>
+							</div>
+					`;
+			building.appendChild(lift);
+		}
+
+		container.appendChild(building);
+
+		// Add event listeners to call buttons
+		container.addEventListener('click', (event) => {
+			if (event.target.classList.contains('call-button')) {
+				const floor = parseInt(event.target.dataset.floor);
+				const direction = event.target.dataset.direction;
+				this.callLift(floor, direction);
+			}
+		});
+
+		// Add event listener for lift state changes
+		this.addEventListener((event) => {
+			if (event.type === 'LIFT_STATE_CHANGED') {
+				this.updateLiftDOM(event.liftNumber, event.state);
+			}
+		});
+	}
+
+	updateLiftDOM(liftNumber, state) {
+		const lift = document.getElementById(`lift-${liftNumber}`);
+		if (!lift) return;
+
+		const floorHeight = 100 / this.numFloors;
+		lift.style.bottom = `${state.currentFloor * floorHeight}%`;
+		lift.className = `lift ${state.doorState}`;
+	}
+
+	startSimulation() {
+		setInterval(() => {
+			this.startLifts();
+		}, 400);
 	}
 }
 
-function gameLoop() {
-	system.startLifts();
-	printStateIfChanged();
-}
-
-// Example: Simulate a few lift calls
-system.callLift(5, 'up');
-system.callLift(3, 'down');
-system.callLift(8, 'up');
-
-setTimeout(() => {
-	system.callLift(1, 'up');
-	system.callLift(7, 'down');
-	system.callLift(4, 'down');
-}, 3000);
-
-setTimeout(() => {
-	system.callLift(1, 'up');
-	system.callLift(2, 'down');
-	system.callLift(1, 'down');
-}, 5000);
-
-// Run the game loop every 400ms
-setInterval(gameLoop, 400);
+// Export the LiftSystem for use in the main script
+export default LiftSystem;

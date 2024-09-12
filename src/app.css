@@ -5,7 +5,10 @@
 
 * {
 	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
 }
+/*
 html {
 	background-color: rgba(0, 0, 0, 0.893);
 }
@@ -65,4 +68,95 @@ button {
 }
 .animate {
 	transition: all 900ms ease-in-out;
+}
+*/
+#lift-simulator {
+	width: 100%;
+	height: 80vh;
+	position: relative;
+	overflow: hidden;
+}
+
+.building {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	background-color: #f0f0f0;
+}
+
+.floor {
+	height: 10%;
+	border-bottom: 1px solid #ccc;
+	display: flex;
+	align-items: center;
+	padding-left: 10px;
+}
+
+.floor-number {
+	margin-right: 10px;
+}
+
+.call-button {
+	margin: 0 5px;
+}
+
+.lift {
+	width: 50px;
+	height: 50px;
+	background-color: #3498db;
+	position: absolute;
+	transition: bottom 1s linear;
+	left: 100px;
+}
+
+.lift-number {
+	text-align: center;
+	color: white;
+}
+
+.doors {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	overflow: hidden;
+}
+
+.door {
+	width: 50%;
+	height: 100%;
+	background-color: #2980b9;
+	position: absolute;
+	transition: transform 0.5s;
+}
+
+.left-door {
+	left: 0;
+}
+
+.right-door {
+	right: 0;
+}
+
+.lift.opening .left-door {
+	transform: translateX(-100%);
+}
+
+.lift.opening .right-door {
+	transform: translateX(100%);
+}
+
+.lift.closing .left-door {
+	transform: translateX(0);
+}
+
+.lift.closing .right-door {
+	transform: translateX(0);
+}
+
+.lift.open .left-door {
+	transform: translateX(-100%);
+}
+
+.lift.open .right-door {
+	transform: translateX(100%);
 }
