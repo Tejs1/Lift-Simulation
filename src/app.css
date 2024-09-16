@@ -108,7 +108,7 @@ body {
 	flex-direction: row;
 	outline: 1px solid salmon !important;
 	outline-offset: -1px;
-	/outline-top: 0;
+	outline-top: 0;
 }
 .floor-path {
 	height: 100px;
