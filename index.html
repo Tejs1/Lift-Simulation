@@ -2,37 +2,31 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Lift Simulator</title>
+		<title>Lift Simulation</title>
 		<link rel="stylesheet" href="./src/app.css" />
 	</head>
 	<body>
-		<form>
-			<label for="floors">Floors </label>
-			<input
-				type="number"
-				placeholder="Floors"
-				id="floors-input"
-				pattern="[4-9]*"
-				max="9"
-				min="4"
-				value="6"
-				required
-			/>
-			<label for="lifts">lifts </label>
-			<input
-				type="number"
-				placeholder="Lifts"
-				id="lifts-input"
-				pattern="[2-8]*"
-				max="8"
-				min="1"
-				value="3"
-				required
-			/>
-		</form>
-		<div id="building"></div>
+		<div id="header">
+			<h1>Lift Simulation</h1>
+		</div>
+
+		<div id="form-section">
+			<form id="form">
+				<div class="form-group">
+					<label id="label-lifts" for="lifts">Lifts:</label>
+					<input type="number" id="lifts" name="lifts" min="1" required />
+				</div>
+				<div class="form-group">
+					<label id="label-floors" for="floors">Floors:</label>
+					<input type="number" id="floors" name="floors" min="1" required />
+				</div>
+				<div class="btn-container">
+					<button type="button" id="btn">Start</button>
+				</div>
+			</form>
+		</div>
+		<div id="lift-floor-UI"></div>
 
 		<script type="module" src="src/app.js"></script>
 	</body>

@@ -3,38 +3,21 @@ class LiftSystem {
 		this.liftInput = document.getElementById('lifts');
 		this.floorInput = document.getElementById('floors');
 		this.startBtn = document.getElementById('btn');
+		this.formSection = document.getElementById('form-section');
 		this.liftFloorSection = document.getElementById('lift-floor-UI');
-
 		this.liftState = [];
 		this.requestQueue = [];
 
 		this.startBtn.addEventListener('click', this.startBtnListener.bind(this));
 	}
 
-	isPositiveInteger(value) {
-		const number = parseInt(value, 10);
-		return Number.isInteger(number) && number > 0;
-	}
-
-	validateForms() {
-		const lifts = this.liftInput.value;
-		const floors = this.floorInput.value;
-
-		if (lifts === '' || floors === '') {
-			alert('Please fill in all required values.');
-			return false;
+	validateForms(form) {
+		for (const input of form) {
+			if (input.hasAttribute('required') && input.value === '') {
+				alert('Please fill in all required values.');
+				return false;
+			}
 		}
-
-		if (isNaN(lifts) || isNaN(floors)) {
-			alert('Please enter numeric values for both lifts and floors.');
-			return false;
-		}
-
-		if (!this.isPositiveInteger(lifts) || !this.isPositiveInteger(floors)) {
-			alert('Please enter positive integers for both lifts and floors.');
-			return false;
-		}
-
 		return true;
 	}
 
@@ -71,6 +54,20 @@ class LiftSystem {
 			.fill(null)
 			.map(() => ({ currentFloor: 0, inUse: false, isMoving: false }));
 		console.log('Lifts initialized:', this.liftState);
+	}
+
+	activateLiftButton(buttonId) {
+		const button = document.getElementById(buttonId);
+		if (button) {
+			button.classList.add('active');
+		}
+	}
+
+	deactivateLiftButton(buttonId) {
+		const button = document.getElementById(buttonId);
+		if (button) {
+			button.classList.remove('active');
+		}
 	}
 
 	openLiftDoors(lift) {
@@ -120,10 +117,11 @@ class LiftSystem {
 		let minimumDistance = Infinity;
 
 		this.toggleFloorButton(`${direction}${floorIndex}`, true);
+		this.activateLiftButton(`${direction}${floorIndex}`);
 
 		for (let i = 0; i < allLifts.length; i++) {
 			const lift = allLifts[i];
-			let currentFloor = parseInt(lift.dataset.currentFloor, 10);
+			let currentFloor = parseInt(lift.dataset.currentFloor);
 			let distance = Math.abs(currentFloor - floorIndex);
 
 			if (
@@ -144,7 +142,7 @@ class LiftSystem {
 			const floorHeight = document.querySelector('.floor-item').offsetHeight;
 			const travelTime = minimumDistance * 2;
 
-			if (parseInt(closestLift.dataset.currentFloor, 10) === floorIndex) {
+			if (parseInt(closestLift.dataset.currentFloor) === floorIndex) {
 				this.openAndCloseLiftDoors(closestLift, floorIndex);
 			} else {
 				closestLift.style.transition = `transform ${travelTime}s linear`;
@@ -175,6 +173,8 @@ class LiftSystem {
 
 				this.toggleFloorButton(`up${floorIndex}`, false);
 				this.toggleFloorButton(`down${floorIndex}`, false);
+				this.deactivateLiftButton(`up${floorIndex}`);
+				this.deactivateLiftButton(`down${floorIndex}`);
 
 				this.processQueue();
 			});
@@ -211,57 +211,72 @@ class LiftSystem {
 	}
 
 	showFloorsAndLifts(floors, lifts) {
+		const floorsContainer = document.createElement('div');
+		floorsContainer.className = 'floors';
+
 		for (let i = floors - 1; i >= 0; i--) {
+			const floor = document.createElement('div');
+			floor.className = `floor floor-${i}`;
+
+			const floorPath = document.createElement('div');
+			floorPath.className = `floor-path floor-path-${i}`;
+
 			const floorItem = document.createElement('div');
 			floorItem.className = `floor-item floor-item-${i}`;
 
 			const liftBtnContainer = document.createElement('div');
-			liftBtnContainer.className = `flex lift-btn-container lift-btn-container-${i}`;
+			liftBtnContainer.className = `lift-btn-container lift-btn-container-${i}`;
 
 			liftBtnContainer.appendChild(this.createButton('Up', i, floors));
 			liftBtnContainer.appendChild(this.createButton('Down', i, floors));
 			floorItem.appendChild(liftBtnContainer);
 
-			if (i === 0) {
-				const liftContainer = document.createElement('div');
-				liftContainer.className = `lift-container lift-container${i}`;
-
-				for (let j = 0; j < lifts; j++) {
-					const lift = document.createElement('div');
-					lift.className = `lift lift${j}`;
-					lift.dataset.currentFloor = 0;
-
-					lift.appendChild(this.createLiftDoors('one', j));
-					lift.appendChild(this.createLiftDoors('two', j));
-
-					lift.style.marginTop = '-64px';
-					liftContainer.appendChild(lift);
-				}
-				floorItem.appendChild(liftContainer);
-			} else {
-				const liftContainer = document.createElement('div');
-				liftContainer.className = `lift-container lift-container${i}`;
-				floorItem.appendChild(liftContainer);
-			}
-
 			const floorContainer = document.createElement('div');
-			floorContainer.className = `flex floor-container floor-container${i}`;
+			floorContainer.className = `floor-container floor-container${i}`;
 
-			const floorLine = document.createElement('div');
-			floorLine.className = `floor-line floor-line${i}`;
+			// const floorLine = document.createElement('div');
+			// floorLine.className = `floor-line floor-line${i}`;
 
 			const floorNumber = document.createElement('p');
 			floorNumber.textContent = `Floor ${i + 1}`;
 
 			floorContainer.appendChild(floorNumber);
-			floorContainer.appendChild(floorLine);
+			// floorContainer.appendChild(floorLine);
 
 			floorItem.appendChild(floorContainer);
 
-			this.liftFloorSection.appendChild(floorItem);
+			floor.appendChild(floorItem);
+			floor.appendChild(floorPath);
+			floorsContainer.appendChild(floor);
 
 			this.updateFloorContainerWidth(i, lifts);
 		}
+
+		this.liftFloorSection.appendChild(floorsContainer);
+
+		const liftContainer = document.createElement('div');
+		liftContainer.className = `lift-container`;
+
+		for (let j = 0; j < lifts; j++) {
+			const lift = document.createElement('div');
+			lift.className = `lift lift${j}`;
+			lift.dataset.currentFloor = 0;
+
+			lift.appendChild(this.createLiftDoors('one', j));
+			lift.appendChild(this.createLiftDoors('two', j));
+
+			liftContainer.appendChild(lift);
+		}
+		this.liftFloorSection.appendChild(liftContainer);
+		// get liftContainer width
+		const liftContainerWidth =
+			document.querySelector('.lift-container').offsetWidth;
+		const controllerWidth = document.querySelector('.floor-item').offsetWidth;
+		this.liftFloorSection.style.width = `${
+			controllerWidth + liftContainerWidth
+		}px`;
+		liftContainer.style.left = `${controllerWidth}px`;
+		console.log(liftContainerWidth, controllerWidth);
 		this.handleLiftBtns(floors, lifts);
 	}
 
@@ -271,23 +286,19 @@ class LiftSystem {
 		const lifts = this.liftInput.value;
 		const floors = this.floorInput.value;
 
-		// Check if inputs are empty
 		if (lifts === '' || floors === '') {
-			alert('Please fill in all required values.');
+			alert('Please fill in Positive Integer values.');
 			return;
 		}
 
-		// Check if inputs contain alphabets
 		if (/[a-zA-Z]/.test(lifts) || /[a-zA-Z]/.test(floors)) {
 			alert('Please enter numeric values only.');
 			return;
 		}
 
-		// Convert to numbers
 		const liftsNum = Number(lifts);
 		const floorsNum = Number(floors);
 
-		// Check if inputs are positive integers
 		if (
 			!Number.isInteger(liftsNum) ||
 			!Number.isInteger(floorsNum) ||
@@ -298,7 +309,6 @@ class LiftSystem {
 			return;
 		}
 
-		// Proceed if validation passes
 		this.liftFloorSection.classList.remove('hidden');
 		this.liftFloorSection.innerHTML = '';
 		this.showFloorsAndLifts(floorsNum, liftsNum);
@@ -306,5 +316,4 @@ class LiftSystem {
 	}
 }
 
-// Usage
-const liftSystem = new LiftSystem();
+const simulator = new LiftSystem();
