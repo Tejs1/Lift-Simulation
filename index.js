@@ -33,6 +33,7 @@ class Lift {
 		this.doorState = 'closed'; // "opening", "closing", "open", "closed"
 		this.previousState = {}; // To track changes
 		this.isServicingFloor = false;
+		this.startTimestamp = Date.now();
 	}
 
 	getState() {
@@ -120,7 +121,11 @@ class Lift {
 	}
 
 	arriveAtFloor(floor) {
-		console.log(`Lift ${this.liftNumber} arrived at floor ${floor}`);
+		console.warn(
+			`Lift ${this.liftNumber} arrived at floor ${floor} : ${
+				Date.now() - this.startTimestamp
+			}`,
+		);
 		this.state = 'stopped';
 		this.isServicingFloor = true;
 		if (this.direction === 'up') {
@@ -132,7 +137,11 @@ class Lift {
 	}
 
 	openDoor() {
-		console.log(`Lift ${this.liftNumber} opening door`);
+		console.log(
+			`Lift ${this.liftNumber} opening door at floor ${this.currentFloor} : ${
+				Date.now() - this.startTimestamp
+			}`,
+		);
 		this.doorState = 'opening';
 		setTimeout(() => {
 			this.doorState = 'open';
@@ -141,14 +150,22 @@ class Lift {
 	}
 
 	stayOpen() {
-		console.log(`Lift ${this.liftNumber} door is open`);
+		console.log(
+			`Lift ${this.liftNumber} door is open at floor ${this.currentFloor} : ${
+				Date.now() - this.startTimestamp
+			}`,
+		);
 		setTimeout(() => {
 			this.closeDoor();
 		}, 1000);
 	}
 
 	closeDoor() {
-		console.log(`Lift ${this.liftNumber} closing door`);
+		console.log(
+			`Lift ${this.liftNumber} closing door : ${
+				Date.now() - this.startTimestamp
+			}`,
+		);
 		this.doorState = 'closing';
 		setTimeout(() => {
 			this.doorState = 'closed';
@@ -165,6 +182,7 @@ class LiftSystem {
 		this.floors = [];
 		this.lifts = [];
 		this.eventListeners = [];
+		this.startTimestamp = Date.now();
 
 		for (let i = 0; i < numFloors; i++) {
 			this.floors.push(new Floor(i));
@@ -233,6 +251,7 @@ class LiftSystem {
 	startLifts() {
 		for (let lift of this.lifts) {
 			lift.move();
+			this.updateLiftDOM(lift.liftNumber, lift.getState());
 		}
 	}
 
@@ -279,16 +298,10 @@ class LiftSystem {
 		// Add event listeners to call buttons
 		container.addEventListener('click', (event) => {
 			if (event.target.classList.contains('call-button')) {
+				console.warn('Call button clicked', Date.now() - this.startTimestamp);
 				const floor = parseInt(event.target.dataset.floor);
 				const direction = event.target.dataset.direction;
 				this.callLift(floor, direction);
-			}
-		});
-
-		// Add event listener for lift state changes
-		this.addEventListener((event) => {
-			if (event.type === 'LIFT_STATE_CHANGED') {
-				this.updateLiftDOM(event.liftNumber, event.state);
 			}
 		});
 	}
@@ -305,9 +318,8 @@ class LiftSystem {
 	startSimulation() {
 		setInterval(() => {
 			this.startLifts();
-		}, 400);
+		}, 100);
 	}
 }
 
-// Export the LiftSystem for use in the main script
 export default LiftSystem;
